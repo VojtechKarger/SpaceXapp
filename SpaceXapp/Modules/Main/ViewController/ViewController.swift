@@ -16,7 +16,6 @@ final class ViewController: UIViewController {
     //MARK: - ViewModel
     let viewModel: MainViewModelProtocol
     var subscriptons: Set<AnyCancellable> = []
-    let presenter: MainPresenter
     
     //MARK: -  UI elements
     private lazy var mainCollectionView: MainCollectionView = {
@@ -36,15 +35,10 @@ final class ViewController: UIViewController {
         return sc
     }()
     
-    init(viewModel: MainViewModelProtocol, presenter: BasePresenter) {
-        guard let presenter = presenter as? MainPresenter else { fatalError() }
-        
+    init(viewModel: MainViewModelProtocol) {
         self.viewModel = viewModel
-        self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
-        
-        self.presenter.parent = self
     }
     
     required init?(coder: NSCoder) {
@@ -147,22 +141,20 @@ extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
-        
+            
         let flight = viewModel.searchCollectionOfFlights[indexPath.row]
         guard let cell = collectionView.cellForItem(at: indexPath) as? MainCollectionViewCell else { return }
         
         let imageFrame = cell.convert(cell.mainImageView.frame, to: view)
         let fromFrame = collectionView.convert(cell.frame, to: collectionView.superview)
-        
-        presenter.fromFrame = fromFrame
-        presenter.imageFrame = imageFrame
-        
-        presenter.present(data: flight)
+                
+        viewModel.presentDetail(flight: flight, fromFrame: fromFrame, imageFrame: imageFrame)
     }
 }
 
 extension ViewController {
     func setupNavBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.prefersLargeTitles = true
         addRefreshGesture()
         navigationItem.title = "SpaceX"

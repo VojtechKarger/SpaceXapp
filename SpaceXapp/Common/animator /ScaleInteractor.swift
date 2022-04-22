@@ -65,7 +65,7 @@ final class ScaleInteractor: UIPercentDrivenInteractiveTransition {
         
         switch pan.state {
         case .began:
-                fromVC?.dismiss(animated: true, completion: nil)
+            fromVC?.navigationController?.popViewController(animated: true)
             
         case .changed:
             guard let lastProgress = lastProgress else {return}

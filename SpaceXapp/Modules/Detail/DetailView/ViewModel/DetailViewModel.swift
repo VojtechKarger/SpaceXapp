@@ -20,12 +20,17 @@ final class DetailViewModel: BaseViewModel<Flight>,
     @Published var dateString: String = ""
     @Published var images: [ImageObject] = []
     
-    var imagesPublisher: Published<[ImageObject]>.Publisher { $images}
+    @Published var crew: [Crew] = []
+    
+    var imagesPublisher: Published<[ImageObject]>.Publisher { $images }
+    var crewPublisher: Published<[Crew]>.Publisher { $crew }
+    
+    weak var coordinator: DetailCoordinator?
     
     var id: String = ""
     
     override func configure(data: Flight) {
-                
+        
         name = data.name
         if let success = data.success {
             failiureText = success ? "succesfull mission" : "mission failed"
@@ -38,8 +43,9 @@ final class DetailViewModel: BaseViewModel<Flight>,
         id = data.id
         
         downloadImages(links: data.links.images.original)
+        getCrew(ids: data.crew)
     }
-
+    
     private func downloadImages(links: [String]) {
         guard !links.isEmpty else {
             let defaultImg = UIImage(named: "SpaceXLogo")!
@@ -64,6 +70,41 @@ final class DetailViewModel: BaseViewModel<Flight>,
                     case .failure(let err):
                         print(err)
                     }
+                }
+            }
+        }
+    }
+    
+    func getCrew(ids: [String]) {
+        for id in ids {
+            Networking.shared.getCrewMember(with: id) { res in
+                switch res {
+                case.success(let member):
+                    self.getImage(for: member)
+                case .failure(let err):
+                    print(err)
+                }
+            }
+        }
+    }
+    
+    private func getImage(for member: Crew) {
+        let link = member.image
+        
+        if ImageStorage.shared.getImage(for: link) != nil {
+            self.crew.append(member)
+        } else {
+            let url = URL(string: link)!
+            Networking.shared.fetchImagefrom(url) { res in
+                switch res {
+                case.success(let data):
+                    guard let image = UIImage(data: data)?
+                        .scalePreservingAspectRatio(targetSize: CGSize(width: 200, height: 200))
+                    else { return }
+                    ImageStorage.shared.store(image, for: link)
+                    self.crew.append(member)
+                case .failure(let err):
+                    print(err)
                 }
             }
         }

@@ -19,6 +19,8 @@ protocol MainViewModelProtocol: BaseViewModel<Any> {
     var filterByImage: Bool { get set }
     
     var sorted: ComparisonResult { get set }
+    
+    var coordinator: MainCoordinator? { get set }
         
     func search(text: String)
     
@@ -26,7 +28,9 @@ protocol MainViewModelProtocol: BaseViewModel<Any> {
         
     func clearSearch()
     
-    func downloadImage(from link: String, completion: @escaping(UIImage) -> Void)
+    func downloadImage(from link: String, completion: @escaping() -> Void)
+    
+    func presentDetail(flight: Flight, fromFrame: CGRect, imageFrame: CGRect)
     
     func updateData(sort: Bool)
     

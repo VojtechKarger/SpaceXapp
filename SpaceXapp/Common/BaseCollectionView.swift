@@ -26,6 +26,20 @@ class BaseCollectionView<T, Cell>: UIView where T: Identifiable,
     
     var datasource: BaseCollectionViewDatasource<T>? = nil
     
+    init() {
+        super.init(frame: .zero)
+        
+        setup()
+        
+        datasource = BaseCollectionViewDatasource()
+        
+        createDataSource()
+        
+        NotificationCenter.default.addObserver(forName: .changedOrientation, object: nil, queue: nil) { _ in
+            self.collectionView.setCollectionViewLayout(self.createLayout(), animated: true)
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()

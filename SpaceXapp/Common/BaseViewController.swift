@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class BaseViewController<T>: UIViewController {
+class BaseViewController<T>: UIViewController{
     
     var viewModel: BaseViewModel<T>?
     
@@ -27,14 +27,18 @@ class BaseViewController<T>: UIViewController {
         self.setUpBindings()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("destroing: ", self)
+    }
+    
     /// override if you use init(viewModel: BaseViewModel? = nil) must be caled from the view Controller that presents this controller
     /// or you can use it to reconfigure ViewModel
     func configure(data: T) {
         self.viewModel?.configure(data: data)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {

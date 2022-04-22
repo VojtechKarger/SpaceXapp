@@ -45,10 +45,7 @@ final class DetailCrewCell: BaseCell<Crew> {
     override func configure(data: Crew) {
         nameLabel.text = data.name
         agencyLabel.text = data.agency
-    }
-    
-    func setImage(_ image: UIImage) {
-        imageView.image = image
+        imageView.image = ImageStorage.shared.getImage(for: data.image) ?? UIImage(named: "placeholder")!
     }
     
     override func addViews() {

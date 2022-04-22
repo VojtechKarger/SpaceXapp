@@ -7,38 +7,15 @@
 
 import UIKit
 
-final class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+final class ScaleAnimator: BaseAnimator {
     
-    private let duration: TimeInterval
-    
-    var animationType: AnimationType!
-
     var fromFrame: CGRect!
     var imageFrame: CGRect!
     
-    enum AnimationType { case present, dismiss }
-    
-    init(duration: TimeInterval) {
-        self.duration = duration
-    }
-    
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return duration
-    }
-    
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        switch animationType {
-        case .present:
-            present(using: transitionContext)
-        case .dismiss:
-            dismiss(using: transitionContext)
-        case .none:
-            fatalError()
-        }
-    }
-    
-    private func present(using context: UIViewControllerContextTransitioning) {
-        switch UIDevice.current.orientation {
+    override func present(using context: UIViewControllerContextTransitioning) {
+        let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
+
+        switch orientation {
         case .portrait, .portraitUpsideDown: presentForPortrait(using: context)
         case.landscapeLeft,.landscapeRight: presentForLandScape(using: context)
         default: presentForLandScape(using: context)
@@ -76,14 +53,14 @@ final class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         context.containerView.addSubview(toVC.view)
         
         let frame = UIScreen.main.bounds
-            
+        toVC.dismissBTN.layer.opacity = 0
         toVC.galeryCollectionView.transform = .init(scaleX: imageFrame.width / frame.width,
                                                          y: imageFrame.width / frame.width)
         toVC.galeryCollectionView.layer.cornerRadius = 10
         toVC.galeryCollectionView.layer.masksToBounds = true
         toVC.view.frame = fromFrame
         
-        toVC.crewView.view.isHidden = true
+        toVC.crewView.isHidden = true
         toVC.detailInfoView.alpha = 0
         
         UIView.animate(withDuration: duration,
@@ -96,9 +73,10 @@ final class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             toVC.galeryCollectionView.layer.cornerRadius = 0
             toVC.galeryCollectionView.transform = .identity
             
+            toVC.dismissBTN.layer.opacity = 1
             toVC.detailInfoView.alpha = 1
         } completion: { complete in
-            toVC.crewView.view.isHidden = false
+            toVC.crewView.isHidden = false
             if context.transitionWasCancelled {
                 context.completeTransition(false)
             } else {
@@ -108,7 +86,7 @@ final class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     }
     
     
-    private func dismiss(using context: UIViewControllerContextTransitioning) {
+    override func dismiss(using context: UIViewControllerContextTransitioning) {
         guard
             let fromVC = context.viewController(forKey: .from) as? DetailViewController,
             let toVC = context.viewController(forKey: .to)

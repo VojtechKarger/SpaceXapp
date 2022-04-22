@@ -12,4 +12,5 @@ class BaseViewModel<T> {
     func configure(data: T) {}
     
     var cancellables: Set<AnyCancellable> = []
+
 }

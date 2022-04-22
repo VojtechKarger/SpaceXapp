@@ -16,6 +16,10 @@ protocol DetailViewModelProtocol: BaseViewModel<Flight> {
     var images: [ImageObject] { get set }
     
     var imagesPublisher: Published<[ImageObject]>.Publisher { get }
+    var crewPublisher: Published<[Crew]>.Publisher { get }
+    
+    var crew: [Crew] { get set }
+    var coordinator: DetailCoordinator? { get set }
     
     var id: String { get set }
 

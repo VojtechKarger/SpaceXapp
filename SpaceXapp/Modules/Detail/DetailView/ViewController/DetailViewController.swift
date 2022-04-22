@@ -42,8 +42,8 @@ final class DetailViewController: BaseViewController<Flight> {
     }()
     
     lazy var crewView: DetailCrewViewController = {
-        let crewView = DetailCrewViewController(viewModel: CrewViewModel())
-        crewView.view.translatesAutoresizingMaskIntoConstraints = false
+        let crewView = DetailCrewViewController()
+        crewView.translatesAutoresizingMaskIntoConstraints = false
         return crewView
     }()
     
@@ -56,7 +56,7 @@ final class DetailViewController: BaseViewController<Flight> {
     }()
     
     private let hasCrew: Bool
-        
+           
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         galeryCollectionView.collectionView.setCollectionViewLayout(createLayout(), animated: true)
@@ -66,8 +66,6 @@ final class DetailViewController: BaseViewController<Flight> {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = Colors.bg
-        navigationController?.navigationBar.prefersLargeTitles = false
-        
         scrollView.delegate = self
                 
         if hasCrew {
@@ -75,17 +73,25 @@ final class DetailViewController: BaseViewController<Flight> {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        guard let viewModel = viewModel as? DetailViewModelProtocol else { fatalError() }
+        viewModel.coordinator?.dismissing()
+    }
+    
     init(flight: Flight, hasCrew: Bool, viewModel: DetailViewModelProtocol) {
         self.hasCrew = hasCrew
         
         super.init(data: flight, viewModel: viewModel)
         
-        //configuring crewView viewModel
-        if hasCrew {
-            crewView.configure(data: flight.crew)
-        }
         
-        galeryCollectionView.configure(data: [], viewModel: viewModel)
+        let images = viewModel.images.map{ $0.image }
+        galeryCollectionView.configure(data: images, viewModel: viewModel)
+        crewView.configure(viewModel: viewModel)
     }
     
     required init?(coder: NSCoder) {
@@ -97,7 +103,7 @@ final class DetailViewController: BaseViewController<Flight> {
         scrollView.addSubview(stackView)
         stackView.addSubview(galeryCollectionView)
         stackView.addSubview(detailInfoView)
-        stackView.addSubview(crewView.view)
+        stackView.addSubview(crewView)
         stackView.addSubview(dismissBTN)
     }
     
@@ -134,25 +140,25 @@ final class DetailViewController: BaseViewController<Flight> {
         ])
         
         NSLayoutConstraint.activate([
-            crewView.view.topAnchor.constraint(equalTo: detailInfoView.bottomAnchor,
+            crewView.topAnchor.constraint(equalTo: detailInfoView.bottomAnchor,
                                                constant: 5),
-            crewView.view.leftAnchor.constraint(equalTo: stackView.leftAnchor),
-            crewView.view.rightAnchor.constraint(equalTo: stackView.rightAnchor),
-            crewView.view.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-            crewView.view.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+            crewView.leftAnchor.constraint(equalTo: stackView.leftAnchor),
+            crewView.rightAnchor.constraint(equalTo: stackView.rightAnchor),
+            crewView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
+            crewView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
         ])
         
         if hasCrew {
-            crewView.view.heightAnchor.constraint(equalToConstant: 240).isActive = true
+            crewView.heightAnchor.constraint(equalToConstant: 240).isActive = true
         }else{
-            crewView.view.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            crewView.heightAnchor.constraint(equalToConstant: 0).isActive = true
         }
         
     }
     
     @objc private
     func dismissBTNpressed() {
-        dismiss(animated: false)
+        navigationController?.popViewController(animated: false)
     }
     
     override func setUpBindings() {

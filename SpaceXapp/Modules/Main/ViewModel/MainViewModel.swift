@@ -15,6 +15,8 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
     
     var sorted = ComparisonResult.orderedDescending
     
+    var coordinator: MainCoordinator?
+    
     fileprivate var idsOfFlights: [Flight] = []
     
     @Published var filterByImage: Bool
@@ -71,7 +73,15 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
         idsOfFlights = flights
     }
     
-    func downloadImage(from link: String, completion: @escaping(UIImage) -> Void) {
+    func presentDetail(flight: Flight, fromFrame: CGRect, imageFrame: CGRect) {
+        guard let coordinator = coordinator else {
+            return
+        }
+
+        coordinator.presentDetail(flight: flight, fromFrame: fromFrame, imageFrame: imageFrame)
+    }
+    
+    func downloadImage(from link: String, completion: @escaping() -> Void) {
         //sets placeholder as current image of the cell
         let url = URL(string: link)!
         Networking.shared.fetchImagefrom(url) { [weak self] data in
@@ -87,7 +97,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
                 if let image = UIImage(data: data)?
                     .scalePreservingAspectRatio(targetSize: size) {
                     self.imageStorage.store(image, for: link)
-                    completion(image)
+                    completion()
                 }
             }
         }

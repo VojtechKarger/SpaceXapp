@@ -23,8 +23,8 @@ class MainCollectionView: BaseCollectionView<Flight, MainCollectionViewCell> {
             .store(in: &cancellables)
     }
     
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         collectionView.prefetchDataSource = self
     }
     
@@ -51,7 +51,7 @@ class MainCollectionView: BaseCollectionView<Flight, MainCollectionViewCell> {
                 }else{
                     //sets placeholder as current image of the cell
                     cell.mainImageView.image = UIImage(named: "placeholder")!
-                    self.viewModel?.downloadImage(from: link) { _ in
+                    self.viewModel?.downloadImage(from: link) {
                         datasource.reloadItems(id: flight.id)
                     }
                 }
@@ -120,7 +120,7 @@ extension MainCollectionView: UICollectionViewDataSourcePrefetching {
             
             if let link = flight.links.images.original.first {
                 if nil == ImageStorage.shared.getImage(for: link) {
-                    self.viewModel?.downloadImage(from: link) { _ in
+                    self.viewModel?.downloadImage(from: link) {
                         datasource.reloadItems(id: flight.id)
                     }
                 }
