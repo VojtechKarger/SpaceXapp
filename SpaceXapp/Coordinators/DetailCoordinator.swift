@@ -39,7 +39,9 @@ class DetailCoordinator: BaseCoordinator {
     }
     
     func dismissing() {
+        navigationController.delegate = nil
         parentCoordinator?.removeChild()
+        log("destroing: \(self)")
     }
     
 }
@@ -47,6 +49,7 @@ class DetailCoordinator: BaseCoordinator {
 
 extension DetailCoordinator: UIViewControllerTransitioningDelegate,
                              UINavigationControllerDelegate {
+
     func navigationController(_ navigationController: UINavigationController,
                               interactionControllerFor animationController: UIViewControllerAnimatedTransitioning)
     -> UIViewControllerInteractiveTransitioning? {

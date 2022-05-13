@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DetailInfoView: BaseView<Flight> {
+class DetailInfoView: BaseView {
 
     lazy var detailLabel: UILabel = {
         let label = UILabel()

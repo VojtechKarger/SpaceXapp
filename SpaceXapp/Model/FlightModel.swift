@@ -35,7 +35,7 @@ struct Flight: Identifiable, Codable {
     let links: Links
     let failures: [Failiure]
     
-    let id: String
+    var id: String
     
     //MARK: - dates
     var formatedDate: String {

@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-class SwiftUIView<T>: BaseView<Any> where T: View {
+class SwiftUIView<T>: BaseView where T: View {
     
     var view: T
     
@@ -20,7 +20,7 @@ class SwiftUIView<T>: BaseView<Any> where T: View {
     
     init(_ view: T) {
         self.view = view
-        super.init(viewModel: nil)
+        super.init()
     }
     
     override func addViews() {

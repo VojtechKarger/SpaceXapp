@@ -68,7 +68,7 @@ final class DetailViewModel: BaseViewModel<Flight>,
                             self.images.append(ImageObject(id: UUID().uuidString, image: image))
                         }
                     case .failure(let err):
-                        print(err)
+                        log(err)
                     }
                 }
             }
@@ -82,7 +82,7 @@ final class DetailViewModel: BaseViewModel<Flight>,
                 case.success(let member):
                     self.getImage(for: member)
                 case .failure(let err):
-                    print(err)
+                    log(err)
                 }
             }
         }
@@ -104,7 +104,7 @@ final class DetailViewModel: BaseViewModel<Flight>,
                     ImageStorage.shared.store(image, for: link)
                     self.crew.append(member)
                 case .failure(let err):
-                    print(err)
+                    log(err)
                 }
             }
         }

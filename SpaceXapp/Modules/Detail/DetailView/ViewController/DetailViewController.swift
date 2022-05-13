@@ -67,14 +67,16 @@ final class DetailViewController: BaseViewController<Flight> {
         // Do any additional setup after loading the view.
         view.backgroundColor = Colors.bg
         scrollView.delegate = self
-                
+                    
         if hasCrew {
             crewView.createDataSource()
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        guard let viewModel = viewModel as? DetailViewModelProtocol else { return }
+        
     }
     
     

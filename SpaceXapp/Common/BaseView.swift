@@ -8,15 +8,13 @@
 import UIKit
 
 
-class BaseView<T>: UIView {
+class BaseView: UIView {
 
-    weak var viewModel: BaseViewModel<T>? = nil
     
-    init(viewModel: BaseViewModel<T>? = nil) {
+    init() {
         super.init(frame: .zero)
         addViews()
         addConstraints()
-        self.viewModel = viewModel
         
         NotificationCenter.default.addObserver(forName: .changedOrientation, object: nil, queue: nil) { _ in
             self.constraints.forEach({ constrainght in

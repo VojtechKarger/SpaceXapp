@@ -54,6 +54,14 @@ class MainCollectionViewCell: BaseCell<Flight> {
          ])
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.mainImageView.image = nil
+        nameLabel.text = ""
+        dateLabel.text = ""
+    }
+    
     override func addViews() {
         addSubview(mainImageView)
         addSubview(nameLabel)

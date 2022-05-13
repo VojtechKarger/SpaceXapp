@@ -13,23 +13,25 @@ class ImageStorage {
     
     static let shared = ImageStorage()
     
-    private init() {}
+    private init() {
+        images.countLimit = 100
+    }
     
-    private var images: [String: ImageObject] = [:]
+    private var images: NSCache<NSString,ImageObject> = .init()
     
     public func store(_ image: UIImage, for id: String) {
-        images[id] = ImageObject(id: id, image: image)
+        images.setObject(ImageObject(id: id, image: image), forKey: id as NSString)
     }
     
     public func getImage(for id: String) -> UIImage? {
-        return images[id]?.image
+        return images.object(forKey: id as NSString)?.image
     }
     
     public func getImageObject(for id: String) -> ImageObject? {
-        return images[id]
+        return images.object(forKey: id as NSString)
     }
     
     public func clear() {
-        images = [:]
+        images.removeAllObjects()
     }
 }

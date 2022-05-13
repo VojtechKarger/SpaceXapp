@@ -12,6 +12,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
     
     var filterByImagePublisher: Published<Bool>.Publisher { $filterByImage }
     var searchCollectionPublisher: Published<[Flight]>.Publisher { $searchCollectionOfFlights }
+    var featuredFlightPublisher: Published<Flight?>.Publisher { $featuredFlight }
     
     var sorted = ComparisonResult.orderedDescending
     
@@ -23,6 +24,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
         
     @Published var searchCollectionOfFlights: [Flight] = []
     
+    @Published private var featuredFlight: Flight?
     //custom image storage used for storing images that are shared between multiple views...
     let imageStorage = ImageStorage.shared
     
@@ -81,6 +83,19 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
         coordinator.presentDetail(flight: flight, fromFrame: fromFrame, imageFrame: imageFrame)
     }
     
+    private func getFeaturedFlight() {
+        var usedFlights = Set(UserDefaults.standard.prevouriousFlights)
+        
+        let flights = idsOfFlights.filter { !usedFlights.contains($0.id) }
+        
+        guard var flight = flights.randomElement() else { return }
+        usedFlights.insert(flight.id)
+        
+        UserDefaults.standard.prevouriousFlights = Array(usedFlights)
+        flight.id = flight.id + "featured"
+        featuredFlight = flight
+    }
+    
     func downloadImage(from link: String, completion: @escaping() -> Void) {
         //sets placeholder as current image of the cell
         let url = URL(string: link)!
@@ -88,7 +103,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
             guard let self = self else { return }
             switch data {
             case .failure(let error):
-                print(error)
+                log(error)
             case .success(let data):
                 let size = UIScreen.main.bounds.size
                 
@@ -115,7 +130,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
                 self.updateData(sort: true)
                 completion()
             case .failure(let error):
-                print("\(Date()) - failiure: \(error)")
+                log("\(Date()) - failiure: \(error)")
             }
         }
     }
@@ -127,8 +142,9 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
                 guard let self = self else { return }
                 self.idsOfFlights = flightsData
                 self.updateData(sort: true)
+                self.getFeaturedFlight()
             case .failure(let error):
-                print("\(Date()) - failiure: \(error)")
+                log("\(Date()) - failiure: \(error)")
             }
         }
     }

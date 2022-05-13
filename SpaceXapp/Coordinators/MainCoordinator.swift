@@ -17,7 +17,7 @@ class MainCoordinator: BaseCoordinator {
         let detailCoordinator = DetailCoordinator(navigationController: navigationController)
         detailCoordinator.start(with: flight, imageFrame: imageFrame, cellFrame: fromFrame)
         detailCoordinator.parentCoordinator = self
-        
+                
         children.append(detailCoordinator)
     }
     

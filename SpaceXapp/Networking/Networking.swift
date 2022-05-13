@@ -13,7 +13,6 @@ class Networking {
     var activeImageRequests: Set<String> = []
     
     func getFlightsData(_ completion: @escaping (Result<[Flight],NetworkingError>)->()){
-        
         let url = URL(string: "https://api.spacexdata.com/v4/launches/")!
         AF.request(url).response { response in
             guard let data = response.data else {

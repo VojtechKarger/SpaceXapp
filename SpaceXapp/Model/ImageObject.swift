@@ -8,7 +8,12 @@
 import Foundation
 import UIKit
 
-struct ImageObject: Identifiable {
+class ImageObject: Identifiable {
     let id: String
     var image: UIImage
+    
+    init(id: String, image: UIImage) {
+        self.id = id
+        self.image = image
+    }
 }

@@ -17,7 +17,7 @@ extension UserDefaults {
     private enum Keys {
 
         static let image = "image"
-
+        static let featured = "featured"
     }
 
     // MARK: - filterByImage
@@ -28,6 +28,18 @@ extension UserDefaults {
         }
         set {
             set(newValue, forKey: Keys.image)
+        }
+    }
+    
+    var prevouriousFlights: [Flight.ID] {
+        get {
+            if let rawValue = array(forKey: Keys.featured) as? [Flight.ID] {
+                return rawValue
+            }
+            return []
+        }
+        set {
+            set(newValue, forKey: Keys.featured)
         }
     }
     

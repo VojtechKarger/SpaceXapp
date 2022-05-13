@@ -6,6 +6,7 @@
 //
 import UIKit
 import Combine
+import Alamofire
 
 enum Section {
     case main
@@ -141,13 +142,25 @@ extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
-            
-        let flight = viewModel.searchCollectionOfFlights[indexPath.row]
+        
+        if searchController.isActive {
+            searchController.dismiss(animated: false) { [weak self] in
+                self?.presentDetail(for: indexPath, collectionView)
+            }
+        }else{
+            presentDetail(for: indexPath, collectionView)
+        }
+    }
+    
+    private func presentDetail(for indexPath: IndexPath,_ collectionView: UICollectionView) {
+        viewModel.coordinator?.navigationController.setNavigationBarHidden(true, animated: false)
+        
+        guard let flight = mainCollectionView.dataSource.returnItem(for: indexPath) else { return }
         guard let cell = collectionView.cellForItem(at: indexPath) as? MainCollectionViewCell else { return }
         
         let imageFrame = cell.convert(cell.mainImageView.frame, to: view)
         let fromFrame = collectionView.convert(cell.frame, to: collectionView.superview)
-                
+        
         viewModel.presentDetail(flight: flight, fromFrame: fromFrame, imageFrame: imageFrame)
     }
 }
@@ -185,7 +198,7 @@ extension ViewController: UISearchControllerDelegate,
             return
         }
         //added delay for typing to fast - the app was crashing before...
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { [weak self] in
             guard let self = self else { return }
             guard text == searchController.searchBar.text else {
                 return

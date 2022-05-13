@@ -29,7 +29,6 @@ class BaseCollectionViewDatasource<T> where T:Identifiable {
     }
     
     func reloadItems(id: T.ID) {
-//        guard snapshot.itemIdentifiers.contains(id) else { return }
         snapshot.reloadItems([id])
         source?.apply(snapshot, animatingDifferences: false)
     }

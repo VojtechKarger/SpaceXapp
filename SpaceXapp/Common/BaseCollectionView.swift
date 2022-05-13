@@ -32,7 +32,6 @@ class BaseCollectionView<T, Cell>: UIView where T: Identifiable,
         setup()
         
         datasource = BaseCollectionViewDatasource()
-        
         createDataSource()
         
         NotificationCenter.default.addObserver(forName: .changedOrientation, object: nil, queue: nil) { _ in
@@ -45,7 +44,6 @@ class BaseCollectionView<T, Cell>: UIView where T: Identifiable,
         setup()
         
         datasource = BaseCollectionViewDatasource()
-        
         createDataSource()
         
         NotificationCenter.default.addObserver(forName: .changedOrientation, object: nil, queue: nil) { _ in
@@ -84,12 +82,8 @@ class BaseCollectionView<T, Cell>: UIView where T: Identifiable,
         }
     }
     
-    
     private func setup() {
         addSubview(collectionView)
         collectionView.sameConstrainghts(as: self)
     }
 }
-
-
-

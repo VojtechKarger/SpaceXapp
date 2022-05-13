@@ -11,7 +11,7 @@ import Combine
 protocol MainViewModelProtocol: BaseViewModel<Any> {
     
     var filterByImagePublisher: Published<Bool>.Publisher { get }
-    
+    var featuredFlightPublisher: Published<Flight?>.Publisher { get }
     var searchCollectionPublisher: Published<[Flight]>.Publisher { get }
     
     var searchCollectionOfFlights: [Flight] { get set }

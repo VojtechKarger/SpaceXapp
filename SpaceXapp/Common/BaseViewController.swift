@@ -32,7 +32,7 @@ class BaseViewController<T>: UIViewController{
     }
     
     deinit {
-        print("destroing: ", self)
+        log("destroing: \(self)")
     }
     
     /// override if you use init(viewModel: BaseViewModel? = nil) must be caled from the view Controller that presents this controller
