@@ -20,7 +20,7 @@ class MainCollectionView: BaseView {
     
     var cancellables: Set<AnyCancellable> = []
     
-    weak var viewModel: MainViewModelProtocol? = nil
+    weak var viewModel: MainViewModel? = nil
     
     override init() {
         super.init()
@@ -36,7 +36,7 @@ class MainCollectionView: BaseView {
         }
     }
     
-    func configure(viewModel: MainViewModelProtocol) {
+    func configure(viewModel: MainViewModel) {
         self.viewModel = viewModel
         
         self.viewModel?.searchCollectionPublisher
@@ -45,6 +45,7 @@ class MainCollectionView: BaseView {
                 self.updateData(data, for: .main)
             }
             .store(in: &cancellables)
+        
         self.viewModel?.featuredFlightPublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { data in
@@ -95,8 +96,14 @@ class MainCollectionView: BaseView {
                 cell.mainImageView.image = image
             }
             
-            cell.nameLabel.text = flight.name
-            
+            if let atrStr = highlight(self.viewModel?.searchText ?? "", in: flight.name) {
+                cell.nameLabel.attributedText = atrStr
+                //cell.nameLabel.text = nil
+            }else {
+                cell.nameLabel.text = flight.name
+                //cell.nameLabel.attributedText = nil
+            }
+
             cell.dateLabel.text = flight.formatedDate
         }
         

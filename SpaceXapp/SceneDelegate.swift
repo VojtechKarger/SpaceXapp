@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         
         let navVC = UINavigationController()
-        let coordinator = MainCoordinator(navigationController: navVC)
+        let coordinator = MainCoordinator(networker: Networking.shared, navigationController: navVC)
         coordinator.start()
         window?.rootViewController = navVC
         window?.makeKeyAndVisible()

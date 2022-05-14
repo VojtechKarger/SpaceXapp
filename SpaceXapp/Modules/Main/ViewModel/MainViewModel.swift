@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
+final class MainViewModel: BaseViewModel<Any> {
     
     var filterByImagePublisher: Published<Bool>.Publisher { $filterByImage }
     var searchCollectionPublisher: Published<[Flight]>.Publisher { $searchCollectionOfFlights }
@@ -25,14 +25,18 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
     @Published var searchCollectionOfFlights: [Flight] = []
     
     @Published private var featuredFlight: Flight?
+    
+    @Published var searchText: String = ""
     //custom image storage used for storing images that are shared between multiple views...
     let imageStorage = ImageStorage.shared
     
-    override init() {
+    let networker: Networker
+    
+    init(networker: Networker) {
         filterByImage = UserDefaults.standard.filterByImage
+        self.networker = networker
         
         super.init()
-
         bind()
     }
     
@@ -43,9 +47,12 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
     }
     
     func search(text: String) {
+        searchText = text
+        
         let filter1: (Flight)->(Bool) = {
             return $0.name.lowercased().contains(text.lowercased())
         }
+        
         let filter2: (Flight)->(Bool) = {
             return !$0.links.images.original.isEmpty && $0.name.lowercased().contains(text.lowercased())
         }
@@ -57,6 +64,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
     
     func clearSearch() {
         updateData(sort: false)
+        searchText = ""
     }
     
     func updateData(sort: Bool) {
@@ -99,7 +107,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
     func downloadImage(from link: String, completion: @escaping() -> Void) {
         //sets placeholder as current image of the cell
         let url = URL(string: link)!
-        Networking.shared.fetchImagefrom(url) { [weak self] data in
+        networker.fetchImagefrom(url) { [weak self] data in
             guard let self = self else { return }
             switch data {
             case .failure(let error):
@@ -122,7 +130,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
         idsOfFlights = []
         imageStorage.clear()
 
-        Networking.shared.getFlightsData{ [weak self] data in
+        networker.getFlightsData{ [weak self] data in
             switch data {
             case.success(let flightsData):
                 guard let self = self else { return }
@@ -136,7 +144,7 @@ final class MainViewModel: BaseViewModel<Any>, MainViewModelProtocol {
     }
     
     func setInitialData() {
-        Networking.shared.getFlightsData{ [weak self] data in
+        networker.getFlightsData{ [weak self] data in
             switch data {
             case.success(let flightsData):
                 guard let self = self else { return }

@@ -75,17 +75,17 @@ final class DetailViewController: BaseViewController<Flight> {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: false)
-        guard let viewModel = viewModel as? DetailViewModelProtocol else { return }
+//        guard let viewModel = viewModel as? DetailViewModelProtocol else { return }
         
     }
     
     
     override func viewDidDisappear(_ animated: Bool) {
-        guard let viewModel = viewModel as? DetailViewModelProtocol else { fatalError() }
+        guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
         viewModel.coordinator?.dismissing()
     }
     
-    init(flight: Flight, hasCrew: Bool, viewModel: DetailViewModelProtocol) {
+    init(flight: Flight, hasCrew: Bool, viewModel: DetailViewModel) {
         self.hasCrew = hasCrew
         
         super.init(data: flight, viewModel: viewModel)

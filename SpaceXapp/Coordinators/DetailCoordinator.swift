@@ -12,16 +12,20 @@ class DetailCoordinator: BaseCoordinator {
     var animator: ScaleAnimator?
     var interactor: ScaleInteractor?
     
-    override init(navigationController: UINavigationController) {
+    let networker: Networker
+    
+    init(navigationController: UINavigationController, networker: Networker) {
         animator = ScaleAnimator(duration: 0.95)
         interactor = ScaleInteractor()
+        
+        self.networker = networker
         
         super.init(navigationController: navigationController)
     }
     
     func start(with flight: Flight, imageFrame: CGRect, cellFrame: CGRect) {
         
-        let viewModel = DetailViewModel()
+        let viewModel = DetailViewModel(networker: networker)
         let vc = DetailViewController(flight: flight, hasCrew: !flight.crew.isEmpty, viewModel: viewModel)
         
         //seting up the interactor and the animator

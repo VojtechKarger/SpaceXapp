@@ -7,7 +7,13 @@
 import Alamofire
 import UIKit
 
-class Networking {
+protocol Networker {
+    func getFlightsData(_ completion: @escaping (Result<[Flight],NetworkingError>)->())
+    func fetchImagefrom(_ url: URL,_ completion: @escaping(Result<Data,NetworkingError>)->())
+    func getCrewMember(with id: String,_ completion: @escaping(Result<Crew,NetworkingError>)->())
+}
+
+class Networking: Networker {
     static let shared = Networking()
     
     var activeImageRequests: Set<String> = []

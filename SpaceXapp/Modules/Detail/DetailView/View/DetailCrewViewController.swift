@@ -9,9 +9,9 @@ import UIKit
 
 final class DetailCrewViewController: BaseCollectionView<Crew, DetailCrewCell> {
     
-    weak var viewModel: DetailViewModelProtocol?
+    weak var viewModel: DetailViewModel?
     
-    func configure(viewModel: DetailViewModelProtocol) {
+    func configure(viewModel: DetailViewModel) {
         self.viewModel = viewModel
                 
         viewModel.crewPublisher

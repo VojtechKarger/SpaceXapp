@@ -9,7 +9,7 @@ import UIKit
 
 class GaleryView: BaseCollectionView<UIImage,GaleryCell> {
     
-    weak var viewModel: DetailViewModelProtocol? = nil
+    weak var viewModel: DetailViewModel? = nil
         
     override func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
@@ -24,7 +24,7 @@ class GaleryView: BaseCollectionView<UIImage,GaleryCell> {
         return layout
     }
     
-    func configure(data: [UIImage], viewModel: DetailViewModelProtocol) {
+    func configure(data: [UIImage], viewModel: DetailViewModel) {
         self.viewModel = viewModel
         updateData(data: data)
         

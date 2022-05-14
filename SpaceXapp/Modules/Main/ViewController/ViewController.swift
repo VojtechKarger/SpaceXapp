@@ -15,7 +15,7 @@ enum Section {
 final class ViewController: UIViewController {
     
     //MARK: - ViewModel
-    let viewModel: MainViewModelProtocol
+    let viewModel: MainViewModel
     var subscriptons: Set<AnyCancellable> = []
     
     //MARK: -  UI elements
@@ -36,7 +36,7 @@ final class ViewController: UIViewController {
         return sc
     }()
     
-    init(viewModel: MainViewModelProtocol) {
+    init(viewModel: MainViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -144,6 +144,8 @@ extension ViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: false)
         
         if searchController.isActive {
+            searchController.searchBar.text = ""
+            viewModel.searchText = ""
             searchController.dismiss(animated: false) { [weak self] in
                 self?.presentDetail(for: indexPath, collectionView)
             }
@@ -206,6 +208,7 @@ extension ViewController: UISearchControllerDelegate,
             //checking if text contains some letters
             guard text.replacingOccurrences(of: " ", with: "") != "" else {
                 self.viewModel.updateData(sort: true)
+                self.viewModel.searchText = ""
                 return
             }
             self.viewModel.search(text: text)

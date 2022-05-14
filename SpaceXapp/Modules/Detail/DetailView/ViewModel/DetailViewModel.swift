@@ -10,7 +10,6 @@ import Combine
 import UIKit
 
 final class DetailViewModel: BaseViewModel<Flight>,
-                             DetailViewModelProtocol,
                              ObservableObject {
     
     //Propeties
@@ -28,6 +27,12 @@ final class DetailViewModel: BaseViewModel<Flight>,
     weak var coordinator: DetailCoordinator?
     
     var id: String = ""
+    
+    let networker: Networker
+    
+    init(networker: Networker) {
+        self.networker = networker
+    }
     
     override func configure(data: Flight) {
         
@@ -59,7 +64,7 @@ final class DetailViewModel: BaseViewModel<Flight>,
                 images.append(image)
             }else{
                 let url = URL(string: link)!
-                Networking.shared.fetchImagefrom(url) { res in
+                networker.fetchImagefrom(url) { res in
                     switch res {
                     case.success(let data):
                         if let image = UIImage(data: data)?
@@ -77,7 +82,7 @@ final class DetailViewModel: BaseViewModel<Flight>,
     
     func getCrew(ids: [String]) {
         for id in ids {
-            Networking.shared.getCrewMember(with: id) { res in
+            networker.getCrewMember(with: id) { res in
                 switch res {
                 case.success(let member):
                     self.getImage(for: member)
@@ -95,7 +100,7 @@ final class DetailViewModel: BaseViewModel<Flight>,
             self.crew.append(member)
         } else {
             let url = URL(string: link)!
-            Networking.shared.fetchImagefrom(url) { res in
+            networker.fetchImagefrom(url) { res in
                 switch res {
                 case.success(let data):
                     guard let image = UIImage(data: data)?

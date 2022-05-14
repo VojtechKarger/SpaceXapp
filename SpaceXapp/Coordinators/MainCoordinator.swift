@@ -9,12 +9,19 @@ import UIKit
 
 class MainCoordinator: BaseCoordinator {
     
+    let networking: Networker
+    
+    init(networker: Networker, navigationController: UINavigationController) {
+        networking = networker
+        super.init(navigationController: navigationController)
+    }
+    
     func start() {
         pushMainVC()
     }
     
     func presentDetail(flight: Flight, fromFrame: CGRect, imageFrame: CGRect) {
-        let detailCoordinator = DetailCoordinator(navigationController: navigationController)
+        let detailCoordinator = DetailCoordinator(navigationController: navigationController, networker: networking)
         detailCoordinator.start(with: flight, imageFrame: imageFrame, cellFrame: fromFrame)
         detailCoordinator.parentCoordinator = self
                 
@@ -28,7 +35,7 @@ class MainCoordinator: BaseCoordinator {
     }
     
     func pushMainVC() {
-        let viewModel = MainViewModel()
+        let viewModel = MainViewModel(networker: networking)
         
         viewModel.coordinator = self
     
