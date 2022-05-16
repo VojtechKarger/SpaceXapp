@@ -59,21 +59,53 @@ struct Flight: Identifiable, Codable {
         case crew = "crew"
         case id = "id"
     }
+
+    init(name: String, date: String,
+         images: [String], details: String? = nil,
+         success: Bool? = nil, failiures: [Failiure] = [],
+         crew: [String] = [], id: String) {
+        
+        self.name = name
+        self.date = date
+        self.links = Links(images: images)
+        self.details = details
+        self.success = success
+        self.failures = failiures
+        self.crew = crew
+        self.id = id
+    }
 }
 
 struct Failiure: Codable {
     let time: Int
     let altitude: Int?
     let reason: String
+    
+    init(time: Int, altitude: Int? = nil,
+         reason: String) {
+        
+        self.time = time
+        self.altitude = altitude
+        self.reason = reason
+    }
 }
 
 struct FlickerImages: Codable {
     let original: [String]
+    
+    init(_ original: [String]) {
+        self.original = original
+    }
 }
 
 struct Links: Codable {
     let images: FlickerImages
     let wikipedia: String?
+    
+    init(images: [String], wiki: String? = nil) {
+        self.images = FlickerImages(images)
+        self.wikipedia = wiki
+    }
     
     enum CodingKeys: String, CodingKey {
         case images = "flickr"

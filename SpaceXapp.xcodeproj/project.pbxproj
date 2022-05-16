@@ -17,6 +17,7 @@
 		791BBAC8282F97F500FB1E28 /* SpaceXappTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791BBAC7282F97F500FB1E28 /* SpaceXappTests.swift */; };
 		791BBAD5282F980200FB1E28 /* SpaceXappUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791BBAD4282F980200FB1E28 /* SpaceXappUITests.swift */; };
 		791BBAD7282F980200FB1E28 /* SpaceXappUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791BBAD6282F980200FB1E28 /* SpaceXappUITestsLaunchTests.swift */; };
+		791BBADF282F990200FB1E28 /* MockNetworker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791BBADD282F98E500FB1E28 /* MockNetworker.swift */; };
 		791D8C8B280CA02300376AB2 /* BaseTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D8C8A280CA02300376AB2 /* BaseTransitioningDelegate.swift */; };
 		791D8C8D280CA0E500376AB2 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D8C8C280CA0E500376AB2 /* Animator.swift */; };
 		792215E927E27A1800E72ABA /* DetailCrewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792215E827E27A1800E72ABA /* DetailCrewViewController.swift */; };
@@ -91,6 +92,7 @@
 		791BBAD2282F980200FB1E28 /* SpaceXappUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpaceXappUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		791BBAD4282F980200FB1E28 /* SpaceXappUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceXappUITests.swift; sourceTree = "<group>"; };
 		791BBAD6282F980200FB1E28 /* SpaceXappUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceXappUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		791BBADD282F98E500FB1E28 /* MockNetworker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworker.swift; sourceTree = "<group>"; };
 		791D8C8A280CA02300376AB2 /* BaseTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTransitioningDelegate.swift; sourceTree = "<group>"; };
 		791D8C8C280CA0E500376AB2 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		792215E827E27A1800E72ABA /* DetailCrewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCrewViewController.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 			isa = PBXGroup;
 			children = (
 				79C5618D27DFC2C400269C72 /* Networking.swift */,
+				791BBADD282F98E500FB1E28 /* MockNetworker.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -549,6 +552,7 @@
 				79E384FD27EE53A4007FB571 /* BasePresenter.swift in Sources */,
 				79F6380527E2547A003C2A94 /* ImageStorage.swift in Sources */,
 				79C5617527DFC29E00269C72 /* AppDelegate.swift in Sources */,
+				791BBADF282F990200FB1E28 /* MockNetworker.swift in Sources */,
 				79F6380727E25B22003C2A94 /* ImageObject.swift in Sources */,
 				793F30A327F632AE006564C2 /* ScaleInteractor.swift in Sources */,
 				792215ED27E27F3E00E72ABA /* DetailCrewCell.swift in Sources */,
